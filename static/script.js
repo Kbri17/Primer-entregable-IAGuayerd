@@ -73,13 +73,13 @@ btnEnviar.addEventListener("click", async () => {
   const data = await res.json();
   inputText.value = "";
   if (data.mensaje) {
-    addMessage(data.mensaje);
+    addMessage(`<div class="table-container"><div class="no-results">${data.mensaje}</div></div>`);
   } else if (Array.isArray(data)) {
-    let html = "<table><tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Medio Pago</th></tr>";
+    let html = `<div class="table-container"><table class="result-table"><thead><tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Medio Pago</th></tr></thead><tbody>`;
     data.forEach(r => {
-      html += `<tr><td>${r.id_venta}</td><td>${r.fecha}</td><td>${r.nombre_cliente}</td><td>${r.medio_pago}</td></tr>`;
+      html += `<tr><td>${r.id_venta}</td><td>${r.fecha || ''}</td><td>${r.nombre_cliente}</td><td>${r.medio_pago}</td></tr>`;
     });
-    html += "</table>";
+    html += `</tbody></table></div>`;
     addMessage(html);
   }
   inputArea.style.display = "none";

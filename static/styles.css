@@ -1,0 +1,77 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f1f3f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#chat-container {
+  background: #fff;
+  width: 500px;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-box {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.message {
+  margin-bottom: 1rem;
+}
+
+.message.bot {
+  background: #e9f1ff;
+  padding: 0.8rem;
+  border-radius: 10px;
+}
+
+.message.user {
+  text-align: right;
+  color: #444;
+}
+
+/* Contenedor para tablas dentro del chat */
+.table-container{overflow:auto;margin-top:8px}
+.result-table{width:100%;border-collapse:collapse;margin:6px 0}
+.result-table thead th{background:#f4f7fb;color:#333;padding:8px;text-align:left;border-bottom:2px solid #e6eefb}
+.result-table tbody td{padding:8px;border-bottom:1px solid #eee}
+.result-table tbody tr:hover{background:#fafcff}
+
+.options-list{display:flex;flex-wrap:wrap;gap:8px}
+.option{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:8px;background:#007bff;color:#fff;cursor:pointer;border:1px solid rgba(0,123,255,0.12)}
+.option small{margin-left:8px;opacity:0.85}
+
+/* Ajustes responsivos */
+@media (max-width:520px){
+  #chat-container{width:92vw}
+  .result-table thead th, .result-table tbody td{padding:6px}
+}
+
+.option {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 5px;
+  cursor: pointer;
+}
+.option:hover {
+  background: #0056b3;
+}
+
+#input-area {
+  display: none;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  background: #fafafa;
+}

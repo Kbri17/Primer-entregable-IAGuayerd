@@ -54,13 +54,13 @@ Notas:
 2. Ejecutar la API (desde la carpeta del proyecto):
    ```
    set PORT=5500
-   python c:\Users\Kenia\Desktop\IA\app.py
+   python app.py
    ```
    Abrir: http://127.0.0.1:5500
 
 3. Ejecutar programa de terminal:
    ```
-   python c:\Users\Kenia\Desktop\IA\programa.py
+   python rograma.py
    ```
 
 ## Ejemplos (curl)

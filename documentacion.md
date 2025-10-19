@@ -1,37 +1,65 @@
-# Documentación del Proyecto: Análisis de Ventas
+# Documentación del Proyecto: Análisis de Ventas (Web + Terminal)
 
-## 1. Tema, Problema y Solución
+## Resumen ejecutivo
+Proyecto que contiene dos interfaces para consultar ventas semestrales:
+- app.py — Servicio web (Flask) que carga datos desde `ventas.xlsx` / `ventas.csv` y expone una API para: resumen por mes, distribución por medio de pago y búsqueda por cliente.
+- programa.py — Herramienta independiente de consola que usa un diccionario interno con datos por mes, categoría (Alimentos, Limpieza) y sucursal; permite ver resúmenes y detalles por sucursal mediante un menú interactivo.
 
-* **Tema:** Análisis interactivo de datos de ventas semestrales para una empresa con múltiples sucursales.
-* **Problema:** La empresa necesita una herramienta rápida y sencilla para consultar y resumir los importes de ventas, que están clasificados por mes, categoría (Alimentos, Limpieza) y sucursal. Realizar estas consultas directamente en el archivo de Excel es un proceso manual y lento.
-* **Solución:** Se ha desarrollado un programa interactivo en Python que carga los datos y permite a los usuarios consultar información específica a través de un menú en la consola. Esto agiliza el acceso a los totales por mes, categoría y los detalles por sucursal.
+## Estado actual
+- app.py: orientado a ejecución local como API/pequeña web. Requiere pandas, openpyxl y flask.
+- programa.py: implementación autónoma en terminal que ya contiene los datos (6 meses, 2 categorías, 6 sucursales) y no necesita dependencias externas.
 
----
+## Estructura de datos esperada
+- app.py:
+  - Archivos aceptados: `ventas.xlsx` (preferible) o `ventas.csv`.
+  - Columnas mínimas: `id_venta`, `fecha`, `nombre_cliente`, `medio_pago`.
+- programa.py:
+  - Usa variable `datos` (estructura dict): meses -> categorías -> sucursales -> importes.
+  - Para actualizar los valores en programa.py, editar el diccionario `datos` dentro del archivo.
 
-## 2. Dataset de Referencia
+## Cómo ejecutar (Windows)
 
-* **Fuente:** El dataset original es un archivo de Excel (`análisis.xlsx`) que contiene los registros de ventas del primer semestre del año.
-* **Definición:** El conjunto de datos representa los importes de ventas, desglosados por seis sucursales, en dos categorías principales de productos.
-* **Estructura:** Los datos están organizados de forma tabular:
-    * **Filas:** Representan los meses (enero a junio).
-    * **Columnas:** Representan las sucursales, agrupadas por categoría de producto (`Alimentos` y `Limpieza`).
-    * **Valores:** Cifras numéricas que corresponden a los importes de venta.
-* **Tipos de Datos:**
-    * **Texto:** Meses, nombres de categorías y nombres de sucursales.
-    * **Numérico:** Importes de las ventas (enteros).
-* **Escala:** El dataset comprende 6 meses, 2 categorías y 6 sucursales.
+- Ejecutar la API web (app.py)
+  1. Instalar dependencias:
+     ```
+     python -m pip install flask pandas openpyxl
+     ```
+  2. Ejecutar:
+     ```
+     set PORT=5500
+     python c:\Users\Kenia\Desktop\IA\app.py
+     ```
+  3. Abrir: http://127.0.0.1:5500
 
----
+- Ejecutar la versión terminal (programa.py)
+  1. No requiere dependencias externas (Python 3.x).
+  2. Ejecutar:
+     ```
+     python c:\Users\Kenia\Desktop\IA\programa.py
+     ```
 
-## 3. Información, Pasos, Pseudocódigo y Diagrama del Programa
+## Endpoints (app.py)
+- GET `/` → plantilla `index.html` si existe.
+- GET `/api/opciones` → opciones disponibles (resumen mes, por medio, buscar cliente).
+- GET `/api/resumen_mes` → resumen agrupado por mes (nombre del mes, cantidad).
+- GET `/api/por_medio` → distribución por `medio_pago`.
+- POST `/api/buscar_cliente` → buscar por `nombre` en JSON: `{ "nombre": "texto" }`.
 
-### Pasos del Programa
+## Menú (programa.py)
+- 1: Resumen general por mes (total por categoría y total general).
+- 2: Total de ventas por categoría en el semestre.
+- 3: Detalle de ventas por sucursal (ventas mensuales por categoría).
+- 4: Salir.
 
-1.  **Carga de Datos:** Los datos del Excel se almacenan en una estructura de datos de Python (un diccionario anidado) para un fácil acceso.
-2.  **Menú Interactivo:** El programa muestra un menú principal con las consultas disponibles.
-3.  **Entrada del Usuario:** El programa espera a que el usuario seleccione una opción.
-4.  **Procesamiento:** Según la opción, el programa realiza el cálculo o la búsqueda correspondiente.
-5.  **Visualización:** Los resultados se presentan de forma clara y legible en la consola.
-6.  **Ciclo:** El programa vuelve al menú principal hasta que el usuario elige la opción de salir.
+## Notas prácticas y recomendaciones
+- app.py está pensado para leer datasets externos; programa.py es ideal para demostraciones o cuando no hay archivos externos.
+- Para mantener un único origen de verdad, considerar:
+  - Convertir `ventas.xlsx` en la estructura `datos` y cargarla en programa.py al inicio, o
+  - Añadir en app.py endpoints que devuelvan datos por sucursal/categoría como los que muestra programa.py.
+- Mejoras sugeridas:
+  - Añadir tests unitarios (rutas de Flask y funciones de programa.py).
+  - Añadir paginación/limitado en búsqueda de clientes.
+  - Crear una UI que consuma la API y/o una opción para que programa.py lea CSV/XLSX.
 
-### Pseudocódigo
+## Registro de cambios
+- 2025-10-19: Documento actualizado para incluir ambas implementaciones (web y terminal).

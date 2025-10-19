@@ -118,33 +118,20 @@ Incluye manejo de excepciones y mensajes claros en logs."
 - Calcular promedio sobre ventas distintas y devolver `{ 'ticket_promedio': X, 'total_ventas': N }`.
 - Manejar división por cero y devolver `0` si no hay ventas."
 
-### 🧩 Prompt 11: Frontend: comportamiento del chat JS
-"Especifica los requisitos para `static/script.js`:
-- Cargar `/api/opciones` al inicio.
-- Mantener estado `currentAction` para decidir a qué endpoint enviar POST.
-- Habilitar entrada solo cuando se selecciona una opción de búsqueda.
-- Renderizar respuestas en tablas HTML (encabezados dinámicos).
-- Manejar y mostrar mensajes de error y 'no hay resultados'.
-- Soportar parámetros de paginación (mostrar botones 'siguiente'/'anterior' si el endpoint soporta `limit`/`offset`)."
+### 🧩 Prompt 11: Diseño UI amigable para dueñas de tienda (estética y usabilidad)
+"Genera una guía y un prompt para diseñar la interfaz web (HTML/CSS/JS) orientada a usuarias dueñas de tiendas (perfil: personas mayores, no técnicas). Requisitos:
 
-### 🧩 Prompt 12: Tests unitarios y de integración
-"Genera tests (pytest) para:
-- Funciones de carga: `cargar_ventas()`, `cargar_detalles()` con archivos de muestra y casos faltantes.
-- Endpoints principales: `/api/resumen_mes`, `/api/buscar_cliente`, `/api/buscar_producto`, `/api/productos_top`, `/api/ticket_promedio`.
-- Casos: respuestas exitosas, inputs inválidos (400), sin datos (listas vacías o mensajes).
-Incluye fixtures con DataFrames pequeños y ejemplos de uso de Flask test_client."
+- Paleta cálida y contrastada (fondos suaves, acentos en naranja/verde), tipografía grande y legible (16px+), interlineado amplio.
+- Botones grandes, con texto claro y iconos sencillos (emoji o SVG) para acciones principales.
+- Opciones en forma de botones tipo 'pill' bien espaciados; evitar inputs pequeños.
+- Mensajes y tablas con colores suaves, bordes redondeados y espacios generosos.
+- Resaltar totales y acciones importantes con un estilo distinto (tarjeta o banda lateral).
+- Accesibilidad: contraste suficiente, foco visible, tamaños de hit target grandes para tocar con dedos.
+- Soporte móvil: diseño responsivo, botones y tablas scrollables.
+- Texto UI en lenguaje claro y cariñoso (ej.: "Buscar producto" -> "Buscar producto (ej. 'aceite')").
+- Añadir una breve ayuda en pantalla (ej.: "Si no encuentra algo, pruebe con otra palabra").
+- Preparar una clase CSS '.print-friendly' para exportar resultados a impresión/recibo.
+- Entregar: fragmento CSS (clases), ejemplos de HTML para botones y tabla, y un pequeño prompt para el diseñador/frontender que implemente el estilo.
 
-### 🧩 Prompt 13: Requisitos, ejecución y despliegue local
-"Genera `requirements.txt` y las instrucciones para ejecutar localmente en Windows y en producción (ej. usar gunicorn en Linux). Incluir:
-- Comandos de instalación pip.
-- Variables de entorno (`PORT`).
-- Ejemplo de servicio systemd o comando `gunicorn app:app -b 0.0.0.0:5500` para despliegue.
-- Notas sobre seguridad mínima: no habilitar debug en producción y validar inputs."
-
-### 🧩 Prompt 14: Buenas prácticas y mejoras futuras
-"Lista sugerencias implementables:
-- Añadir autenticación básica para endpoints de administración.
-- Añadir paginación y filtrado avanzado (rango de fechas, sucursal, categoría).
-- Endpoint para exportar resultados a CSV/XLSX.
-- Pipeline de tests en CI (GitHub Actions) que ejecute linters y pytest.
-- Documentar API con OpenAPI/Swagger."
+Ejemplo de prompt para IA/frontender:
+'Genera HTML y CSS siguiendo la paleta cálida (naranja/verde), tipografía grande y controles táctiles. Incluye un componente de chat con botones grandes de opciones, entrada visible, tabla de resultados y una tarjeta que destaque el total. Añade estilos print-friendly. Mantén el lenguaje apropiado para usuarias mayores.'"

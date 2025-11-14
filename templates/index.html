@@ -1,19 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat de Ventas Interactivo</title>
-  <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-  <div id="chat-container">
-    <div id="chat-box"></div>
-    <div id="input-area">
-      <input type="text" id="input-text" placeholder="Escribe un nombre de cliente..." />
-      <button id="btn-enviar">Enviar</button>
-    </div>
-  </div>
-  <script src="/static/script.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Buscador de Precios</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Buscador de Precios</h1>
+      <p class="lead">Escribe el nombre del producto para ver su precio o agrega nuevos ítems.</p>
+    </header>
+
+    <main>
+      <div id="chat-container">
+        <div id="chat-box"></div>
+
+        <div id="controls">
+          <div class="pill" id="btn-search">🔎 Buscar producto</div>
+          <div class="pill" id="btn-add">➕ Agregar producto</div>
+        </div>
+
+        <div id="search-area" class="panel hidden">
+          <input id="input-product" placeholder="Ej: Aceite Oliva 1L" />
+          <button id="search-go">Buscar</button>
+        </div>
+
+        <div id="add-area" class="panel hidden">
+          <input id="add-product" placeholder="Nombre del producto" />
+          <input id="add-price" placeholder="Precio" type="number" step="0.01" />
+          <button id="add-go">Agregar</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      
+    </footer>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
+<!-- REMOVED: original UI replaced by minimal API. -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>REMOVED</title>
+  </head>
+  <body>
+    
+  </body>
 </html>

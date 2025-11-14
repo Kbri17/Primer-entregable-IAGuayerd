@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS
 import pandas as pd
 import os
 from pathlib import Path
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
+# Allow cross-origin requests so the frontend can call this API when hosted elsewhere
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 DATA_FILE = Path('ventas.xlsx')
 
 

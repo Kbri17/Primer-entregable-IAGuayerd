@@ -1,3 +1,6 @@
 Flask
 pandas
 openpyxl
+
+# CORS support for Flask
+flask-cors

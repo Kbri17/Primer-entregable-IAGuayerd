@@ -241,6 +241,41 @@ html,body{
   font-weight:600;
 }
 
+/* Contenedor de estadísticas (Dashboard) */
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #4aa96c 0%, #357a52 100%);
+  color: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(74, 169, 108, 0.2);
+}
+
+.stat-card:nth-child(2n) {
+  background: linear-gradient(135deg, #ff8c42 0%, #e67e3b 100%);
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.2);
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  word-break: break-word;
+}
+
 /* Ajustes móviles */
 @media (max-width:600px){
   #chat-container{height:86vh;padding:8px}

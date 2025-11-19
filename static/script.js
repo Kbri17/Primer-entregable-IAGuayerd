@@ -41,7 +41,39 @@ async function handleOption(id, text) {
   // Reset acción por defecto
   currentAction = null;
 
-  if (id === "resumen_mes") {
+  if (id === "dashboard") {
+    const res = await fetch("/api/dashboard");
+    const data = await res.json();
+    let html = `<div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-label">💰 Total Ventas</div>
+        <div class="stat-value">S/ ${data.total_ventas || 0}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">🧾 Transacciones</div>
+        <div class="stat-value">${data.total_transacciones || 0}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">👥 Clientes Únicos</div>
+        <div class="stat-value">${data.clientes_unicos || 0}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">💵 Ticket Promedio</div>
+        <div class="stat-value">S/ ${data.ticket_promedio || 0}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">🏆 Producto Favorito</div>
+        <div class="stat-value">${data.producto_mas_vendido || "N/A"}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">💳 Pago Principal</div>
+        <div class="stat-value">${data.medio_pago_principal || "N/A"}</div>
+      </div>
+    </div>`;
+    addMessage(html);
+    setTimeout(cargarOpciones, 300);
+  }
+  else if (id === "resumen_mes") {
     const res = await fetch("/api/resumen_mes");
     const data = await res.json();
     let html = `<div class="table-container"><table class="result-table"><thead><tr><th>Mes</th><th>Ventas</th></tr></thead><tbody>`;
@@ -68,6 +100,19 @@ async function handleOption(id, text) {
   }
   else if (id === "productos_top" || id === "productos_mas_cantidades") {
     const res = await fetch(`/api/${id}`);
+    const data = await res.json();
+    let html = `<div class="table-container"><table class="result-table"><thead><tr>`;
+    Object.keys(data[0] || {}).forEach(k => html += `<th>${k}</th>`);
+    html += `</tr></thead><tbody>`;
+    data.forEach(r => {
+      html += `<tr>${Object.values(r).map(v => `<td>${v}</td>`).join('')}</tr>`;
+    });
+    html += `</tbody></table></div>`;
+    addMessage(html);
+    setTimeout(cargarOpciones, 300);
+  }
+  else if (id === "clientes_top") {
+    const res = await fetch("/api/clientes_top");
     const data = await res.json();
     let html = `<div class="table-container"><table class="result-table"><thead><tr>`;
     Object.keys(data[0] || {}).forEach(k => html += `<th>${k}</th>`);

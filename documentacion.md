@@ -28,9 +28,11 @@ Aplicación que ofrece dos formas de consultar ventas semestrales:
 
 ## Endpoints (resumen)
 - GET / → plantilla `index.html` (UI chat)  
-- GET /api/opciones → lista de acciones disponibles (incluye buscar producto y productos top)  
+- GET /api/opciones → lista de acciones disponibles (incluye buscar producto, productos top, dashboard, etc.)  
 - GET /api/resumen_mes → resumen agrupado por mes (nombre del mes, cantidad de ventas)  
 - GET /api/por_medio → distribución por `medio_pago`  
+- GET /api/dashboard → resumen general de ventas (total, clientes únicos, ticket promedio, etc.)  
+- GET /api/clientes_top → top 10 clientes por gasto total  
 - POST /api/buscar_cliente → payload { "nombre": "texto" } → filas coincidentes en ventas  
 - POST /api/buscar_producto → payload { "nombre": "texto" } → filas coincidentes en detalle_ventas  
 - GET /api/productos_top → top 10 productos por `importe`  
@@ -89,3 +91,83 @@ Notas:
 
 ## Registro de cambios
 - 2025-10-19: Documento actualizado para incluir endpoints de productos y corrección en static/script.js (buscar producto).
+- 2025-11-18: Se añadieron nuevos endpoints de estadísticas y dashboard interactivo.
+
+## Nuevas Estadísticas (2025-11-18)
+
+### Endpoints Adicionales
+
+#### **GET /api/dashboard**
+Retorna un resumen general de ventas en tiempo real:
+```json
+{
+  "total_ventas": 1500.50,
+  "total_transacciones": 69,
+  "clientes_unicos": 25,
+  "ticket_promedio": 21.74,
+  "producto_mas_vendido": "Aceite de Oliva",
+  "medio_pago_principal": "Tarjeta de Crédito"
+}
+```
+
+**Descripción de campos:**
+- `total_ventas`: suma total de todos los precios (en S/.)
+- `total_transacciones`: cantidad total de registros en `ventas.xlsx`
+- `clientes_unicos`: cantidad de clientes diferentes (sin duplicados)
+- `ticket_promedio`: promedio de precio por venta (total_ventas / total_transacciones)
+- `producto_mas_vendido`: producto que más veces fue vendido
+- `medio_pago_principal`: medio de pago más utilizado
+
+#### **GET /api/clientes_top**
+Retorna los 10 clientes que más han gastado:
+```json
+[
+  {"Cliente": "Juan García", "Total gastado (S/.)": 450.25},
+  {"Cliente": "María López", "Total gastado (S/.)": 380.00},
+  ...
+]
+```
+
+### Interfaz Web (Dashboard)
+
+En la interfaz del chat, ahora hay un nuevo botón:
+- **📊 Dashboard de ventas** — Muestra tarjetas interactivas con:
+  - 💰 Total Ventas
+  - 🧾 Transacciones
+  - 👥 Clientes Únicos
+  - 💵 Ticket Promedio
+  - 🏆 Producto Favorito
+  - 💳 Pago Principal
+
+Las tarjetas tienen estilos visuales atractivos con gradientes alternando entre verde y naranja.
+
+### Normalizaciones de Datos
+
+Se mejoró la normalización de tipos en `cargar_ventas()`:
+- La columna `precio` se convierte a numérica automáticamente (errores se convierten a 0)
+- Permite cálculos precisos de totales y promedios
+
+### Cómo Usar las Nuevas Estadísticas
+
+1. Abre la aplicación en: http://127.0.0.1:5500
+2. Haz clic en **"📊 Dashboard de ventas"**
+3. Se mostrarán todas las estadísticas en tiempo real
+4. Haz clic en **"🏅 Top 10 clientes por gasto"** para ver el ranking de clientes
+
+### Ejemplos (curl)
+
+- Ver dashboard:
+  ```
+  curl http://127.0.0.1:5500/api/dashboard
+  ```
+  
+- Ver top 10 clientes:
+  ```
+  curl http://127.0.0.1:5500/api/clientes_top
+  ```
+
+### Tecnología Usada
+
+- **Backend**: Flask con pandas para cálculos
+- **Frontend**: HTML/CSS/JavaScript con renderizado dinámico de tarjetas
+- **Datos**: `ventas.xlsx` (columnas: producto, precio, id_venta, fecha, id_cliente, nombre_cliente, email, medio_pago)

@@ -43,6 +43,10 @@ def cargar_ventas():
     df["nombre_cliente"] = df["nombre_cliente"].fillna("").astype(str)
     df["email"] = df["email"].fillna("").astype(str)
     df["medio_pago"] = df["medio_pago"].fillna("").astype(str)
+    
+    # Normalizar precio si existe
+    if "precio" in df.columns:
+        df["precio"] = pd.to_numeric(df["precio"], errors="coerce").fillna(0)
 
     logger.info(f"Archivo de VENTAS cargado con {len(df)} registros.")
     logger.info(f"Columnas de VENTAS: {list(df.columns)}")
@@ -100,12 +104,14 @@ def index():
 def api_opciones():
     """Primer menú de opciones del chat"""
     opciones = [
+        {"id": "dashboard", "texto": "📊 Dashboard de ventas"},
         {"id": "resumen_mes", "texto": "📅 Ver ventas por mes"},
         {"id": "por_medio", "texto": "💳 Ver distribución por medio de pago"},
         {"id": "buscar_cliente", "texto": "👤 Buscar ventas por cliente"},
         {"id": "productos_top", "texto": "🏆 Top 10 productos por importe"},
         {"id": "productos_mas_cantidades", "texto": "📦 Top 10 productos por cantidad"},
         {"id": "ticket_promedio", "texto": "💰 Ver ticket promedio por venta"},
+        {"id": "clientes_top", "texto": "🏅 Top 10 clientes por gasto"},
         {"id": "buscar_producto", "texto": "🔎 Buscar producto"},
     ]
     return jsonify(opciones)
@@ -216,6 +222,64 @@ def api_buscar_producto():
     
     resultados_out = resultados.to_dict(orient="records")
     return jsonify(resultados_out)
+
+@app.route("/api/dashboard")
+def api_dashboard():
+    """Dashboard con resumen general de ventas"""
+    stats = {}
+    
+    # Total ventas
+    if "precio" in df_ventas.columns:
+        stats["total_ventas"] = round(df_ventas["precio"].sum(), 2)
+    else:
+        stats["total_ventas"] = 0.0
+    
+    # Cantidad de transacciones
+    stats["total_transacciones"] = len(df_ventas)
+    
+    # Cantidad de clientes únicos
+    if "nombre_cliente" in df_ventas.columns:
+        stats["clientes_unicos"] = df_ventas["nombre_cliente"].nunique()
+    else:
+        stats["clientes_unicos"] = 0
+    
+    # Ticket promedio
+    if stats["total_transacciones"] > 0:
+        stats["ticket_promedio"] = round(stats["total_ventas"] / stats["total_transacciones"], 2)
+    else:
+        stats["ticket_promedio"] = 0.0
+    
+    # Producto más vendido (por cantidad)
+    if "producto" in df_ventas.columns and not df_ventas["producto"].empty:
+        producto_mas_vendido = df_ventas["producto"].value_counts().idxmax()
+        stats["producto_mas_vendido"] = str(producto_mas_vendido)
+    else:
+        stats["producto_mas_vendido"] = "N/A"
+    
+    # Medio de pago más usado
+    if "medio_pago" in df_ventas.columns and not df_ventas["medio_pago"].empty:
+        medio_mas_usado = df_ventas["medio_pago"].value_counts().idxmax()
+        stats["medio_pago_principal"] = str(medio_mas_usado)
+    else:
+        stats["medio_pago_principal"] = "N/A"
+    
+    return jsonify(stats)
+
+@app.route("/api/clientes_top")
+def api_clientes_top():
+    """Top 10 clientes por gasto total"""
+    if "nombre_cliente" not in df_ventas.columns or "precio" not in df_ventas.columns:
+        return jsonify([])
+    
+    resumen = (
+        df_ventas.groupby("nombre_cliente")["precio"]
+        .sum()
+        .reset_index()
+        .sort_values("precio", ascending=False)
+        .head(10)
+    )
+    resumen.columns = ["Cliente", "Total gastado (S/.)"]
+    return jsonify(resumen.to_dict(orient="records"))
 
 
 if __name__ == "__main__":
